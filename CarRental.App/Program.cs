@@ -1,13 +1,19 @@
-﻿using CarRental.Core;
+using CarRental.Core;
 using CarRental.Services;
 using System.Linq;
 
 namespace CarRental.App
 {
+    /// <summary>
+    /// Точка входа приложения и основной консольный интерфейс работы с системой аренды
+    /// </summary>
     internal class Program
     {
         private static RentalCostService costService = new RentalCostService();
 
+        /// <summary>
+        /// Главный метод приложения, реализующий цикл меню и обработку команд пользователя
+        /// </summary>
         static void Main()
         {
             var storage = DataStorage.Load();
@@ -76,6 +82,10 @@ namespace CarRental.App
             }
         }
 
+        /// <summary>
+        /// Отображает список автомобилей в кратком или полном виде в зависимости от выбранной роли
+        /// </summary>
+        /// <param name="catalog">Каталог автомобилей</param>
         static void ShowCars(CarCatalog catalog)
         {
             var cars = catalog.GetAll();
@@ -126,6 +136,10 @@ namespace CarRental.App
             }
         }
 
+        /// <summary>
+        /// Запрашивает у пользователя характеристики и добавляет новый автомобиль в каталог
+        /// </summary>
+        /// <param name="catalog">Каталог автомобилей</param>
         static void AddCar(CarCatalog catalog)
         {
             Console.WriteLine("1. Audi\n2. BMW");
@@ -187,6 +201,11 @@ namespace CarRental.App
             Console.WriteLine("Машина добавлена.");
         }
 
+        /// <summary>
+        /// Создаёт заявку на аренду автомобиля по введённым данным клиента и опциям
+        /// </summary>
+        /// <param name="catalog">Каталог автомобилей</param>
+        /// <param name="storage">Хранилище данных приложения</param>
         static void RentCar(CarCatalog catalog, DataStorage storage)
         {
             int id = InputHelper.ReadPositiveInt("Введите ID машины: ");
@@ -240,6 +259,10 @@ namespace CarRental.App
             Console.WriteLine($"Стоимость аренды: {request.TotalCost}$");
         }
 
+        /// <summary>
+        /// Выводит на экран список всех существующих заявок на аренду
+        /// </summary>
+        /// <param name="storage">Хранилище данных приложения</param>
         static void ShowRequests(DataStorage storage)
         {
             if (storage.Requests.Count == 0)
@@ -256,6 +279,10 @@ namespace CarRental.App
             }
         }
 
+        /// <summary>
+        /// Удаляет заявку по идентификатору, освобождает соответствующий автомобиль и перенумеровывает оставшиеся заявки
+        /// </summary>
+        /// <param name="storage">Хранилище данных приложения</param>
         static void DeleteRequest(DataStorage storage)
         {
             int id = InputHelper.ReadPositiveInt("Введите ID заявки: ");

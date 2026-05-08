@@ -1,20 +1,36 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using CarRental.Core;
 
 namespace CarRental.Services
 {
+    /// <summary>
+    /// Объект передачи данных хранилища, используемый при сериализации в JSON
+    /// </summary>
     public class DataStorageDto
     {
+        /// <summary>Список автомобилей в виде DTO</summary>
         public List<CarDto> Cars { get; set; } = new();
+
+        /// <summary>Список заявок на аренду</summary>
         public List<RentalRequest> Requests { get; set; } = new();
     }
+
+    /// <summary>
+    /// Хранилище данных приложения, обеспечивающее загрузку и сохранение в JSON-файл
+    /// </summary>
     public class DataStorage
     {
         private const string FileName = "data.json";
 
+        /// <summary>Список автомобилей в каталоге</summary>
         public List<Car> Cars { get; set; } = new();
+
+        /// <summary>Список заявок на аренду</summary>
         public List<RentalRequest> Requests { get; set; } = new();
 
+        /// <summary>
+        /// Сериализует автомобили и заявки в файл хранилища
+        /// </summary>
         public void Save()
         {
             var dto = new DataStorageDto();
@@ -36,7 +52,7 @@ namespace CarRental.Services
                 });
             }
             foreach (var r in Requests)
-            { 
+            {
                 r.CarId = r.Car?.Id ?? -1;
             }
 
@@ -50,6 +66,10 @@ namespace CarRental.Services
             File.WriteAllText(FileName, json);
         }
 
+        /// <summary>
+        /// Загружает данные из JSON-файла и восстанавливает связи между объектами
+        /// </summary>
+        /// <returns>Новый экземпляр <see cref="DataStorage"/> с загруженными данными</returns>
         public static DataStorage Load()
         {
             if (!File.Exists(FileName))
